@@ -1,0 +1,104 @@
+---
+title: "Nicardipine vs. Clevidipine"
+output: 
+    html_notebook:
+        code_folding: hide
+        toc: yes
+        toc_float: yes
+---
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(results='asis')
+
+library(readxl)
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(purrr)
+library(MESS)
+library(tableone)
+
+sbp <- read_excel("../data/raw/sbp.xlsx") %>%
+    mutate(group = if_else(Group == "N", "nicardipine", "clevidipine"),
+           goal = if_else(Diagnosis == 1, 180, 150),
+           diagnosis = if_else(Diagnosis == 1, "stroke", "ich")) %>%
+    select(patient = `Patient number`,
+           group,
+           diagnosis,
+           admit = `Admit Time`,
+           med.time = Time,
+           sbp = SBP,
+           goal) %>%
+    arrange(patient, med.time) %>%
+    group_by(patient) %>%
+    mutate(duration = as.numeric(difftime(med.time, first(med.time), units = "hours")))
+
+sbp.auc <- sbp %>%
+    filter(duration <= 24) %>%
+    group_by(patient) %>%
+    summarize(auc.24h = auc(duration, sbp))
+
+sbp.change <- sbp %>%
+    mutate(diff2 = abs(2 - duration),
+           diff6 = abs(6 - duration)) %>%
+    group_by(patient) %>%
+    filter(duration == 0 | (diff2 == min(diff2) & diff2 <= 1) | (diff6 == min(diff6) & diff6 <= 1)) %>%
+    mutate(change = sbp - first(sbp)) %>%
+    filter(duration > 0) %>%
+    mutate(period = if_else(diff2 <= 1, "change.2hr", if_else(diff6 <= 1, "change.6hr", NA_character_))) %>%
+    group_by(patient, period) %>%
+    summarize(change = first(change)) %>%
+    spread(period, change)
+
+data.bp <- sbp %>%
+    ungroup() %>%
+    distinct(patient, group, diagnosis) %>%
+    left_join(sbp.auc, by = "patient") %>%
+    left_join(sbp.change, by = "patient")
+
+mean.bp <- data.bp %>%
+    group_by(group, diagnosis) %>%
+    summarize(auc.24h.mean = mean(auc.24h, na.rm = TRUE),
+              auc.24h.sd = sd(auc.24h, na.rm = TRUE),
+              auc.24h.se = auc.24h.sd / sqrt(length(auc.24h)),
+              change.2hr.mean = mean(change.2hr, na.rm = TRUE),
+              change.2hr.sd = sd(change.2hr, na.rm = TRUE),
+              change.2hr.se = change.2hr.sd / sqrt(length(change.2hr)),
+              change.6hr.mean = mean(change.6hr, na.rm = TRUE),
+              change.6hr.sd = sd(change.6hr, na.rm = TRUE),
+              change.6hr.se = change.6hr.sd / sqrt(length(change.6hr)))
+
+# wilcox.test(auc.24h ~ group, data = data.bp, subset = data.bp$diagnosis == "stroke")
+
+# tests <- data.bp %>%
+#     slice_rows("diagnosis") %>%
+#     by_slice(partial(wilcox.test, auc.24h ~ group))
+# tests$.out
+```
+
+### Stroke
+```{r stroke_mean, results='asis'}
+vars <- c("auc.24h", "change.2hr", "change.6hr")
+tbl <- CreateTableOne(vars, "group", data.bp[data.bp$diagnosis == "stroke", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl, caption = "Stroke")
+```
+
+```{r stroke_median, results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl, caption = "Stroke")
+```
+
+
+### ICH
+```{r ich_mean, results='asis'}
+tbl <- CreateTableOne(vars, "group", data.bp[data.bp$diagnosis == "ich", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl, caption = "ICH")
+```
+
+```{r ich_median, results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl, caption = "ICH")
+```
+
