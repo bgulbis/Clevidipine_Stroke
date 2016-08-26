@@ -31,13 +31,29 @@ sbp <- read_excel("../data/raw/sbp.xlsx") %>%
            goal) %>%
     arrange(patient, med.time) %>%
     group_by(patient) %>%
-    mutate(duration = as.numeric(difftime(med.time, first(med.time), units = "hours")))
+    mutate(duration = as.numeric(difftime(med.time, first(med.time), units = "hours")),
+           interval = as.numeric(difftime(lead(med.time), med.time, units = "hours")),
+           interval = coalesce(interval, 0),
+           at.goal = sbp <= goal)
 
 sbp.auc <- sbp %>%
     filter(duration <= 24) %>%
     group_by(patient) %>%
-    summarize(auc.24h = auc(duration, sbp))
+    summarize(cum.duration = last(duration),
+              sbp.first = first(sbp),
+              sbp.last = last(sbp),
+              perc.change.sbp = (sbp.last - sbp.first) / sbp.first,
+              sbp.min = min(sbp),
+              auc.24h = auc(duration, sbp),
+              sbp.mean.weighted = auc.24h / cum.duration)
 
+sbp.min <- sbp %>%
+    inner_join(sbp.auc, by = "patient") %>%
+    filter(sbp == sbp.min) %>%
+    arrange(patient, duration) %>%
+    group_by(patient) %>%
+    summarize(sbp.min.time = first(duration))
+    
 sbp.change <- sbp %>%
     mutate(diff2 = abs(2 - duration),
            diff6 = abs(6 - duration)) %>%
@@ -50,10 +66,19 @@ sbp.change <- sbp %>%
     summarize(change = first(change)) %>%
     spread(period, change)
 
+sbp.goal <- sbp %>%
+    filter(duration <= 24,
+           at.goal == TRUE) %>%
+    group_by(patient) %>%
+    summarize(time.at.goal = sum(interval))
+
 data.bp <- sbp %>%
     ungroup() %>%
     distinct(patient, group, diagnosis) %>%
     left_join(sbp.auc, by = "patient") %>%
+    left_join(sbp.min, by = "patient") %>%
+    left_join(sbp.goal, by = "patient") %>%
+    mutate(perc.time.at.goal = time.at.goal / cum.duration) %>%
     left_join(sbp.change, by = "patient")
 
 mean.bp <- data.bp %>%
@@ -76,29 +101,56 @@ mean.bp <- data.bp %>%
 # tests$.out
 ```
 
+### All Patients
+```{r sbp_all, results='asis'}
+df <- data.bp %>%
+    select(patient, group, diagnosis,
+           `Starting SBP` = sbp.first,
+           `Mean SBP (Time-Weighted)` = sbp.mean.weighted,
+           `Final SBP` = sbp.last,
+           `Percent Change in SBP` = perc.change.sbp,
+           `Percent Time Below SBP Goal` = perc.time.at.goal,
+           `Minimum SBP` = sbp.min,
+           `Time to Minimum SBP` = sbp.min.time,
+           `24-Hour SBP AUC` = auc.24h,
+           `SBP Change at 2-Hours` = change.2hr,
+           `SBP Change at 6-Hours` = change.6hr)
+
+vars <- names(df)[-c(1:3)]
+tbl <- CreateTableOne(vars, "group", df)
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "All Patients")
+```
+
+```{r sbp_median, results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+
 ### Stroke
 ```{r stroke_mean, results='asis'}
-vars <- c("auc.24h", "change.2hr", "change.6hr")
-tbl <- CreateTableOne(vars, "group", data.bp[data.bp$diagnosis == "stroke", ])
+# vars <- c("auc.24h", "change.2hr", "change.6hr")
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "stroke", ])
 ptbl <- print(tbl, printToggle = FALSE)
-knitr::kable(ptbl, caption = "Stroke")
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
 ```
 
 ```{r stroke_median, results='asis'}
 ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
-knitr::kable(ptbl, caption = "Stroke")
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
 ```
 
 
 ### ICH
 ```{r ich_mean, results='asis'}
-tbl <- CreateTableOne(vars, "group", data.bp[data.bp$diagnosis == "ich", ])
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "ich", ])
 ptbl <- print(tbl, printToggle = FALSE)
-knitr::kable(ptbl, caption = "ICH")
+knitr::kable(ptbl[, 1:3], caption = "ICH")
 ```
 
 ```{r ich_median, results='asis'}
 ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
-knitr::kable(ptbl, caption = "ICH")
+knitr::kable(ptbl[, 1:3], caption = "ICH")
 ```
 
