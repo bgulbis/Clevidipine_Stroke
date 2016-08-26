@@ -102,16 +102,19 @@ mean.bp <- data.bp %>%
 ```
 
 ### All Patients
+
+**Note:** Data within the first 24 hours only.
+
 ```{r sbp_all, results='asis'}
 df <- data.bp %>%
     select(patient, group, diagnosis,
            `Starting SBP` = sbp.first,
-           `Mean SBP (Time-Weighted)` = sbp.mean.weighted,
+           `Mean SBP (time-weighted)` = sbp.mean.weighted,
            `Final SBP` = sbp.last,
            `Percent Change in SBP` = perc.change.sbp,
            `Percent Time Below SBP Goal` = perc.time.at.goal,
            `Minimum SBP` = sbp.min,
-           `Time to Minimum SBP` = sbp.min.time,
+           `Time to Minimum SBP (hours)` = sbp.min.time,
            `24-Hour SBP AUC` = auc.24h,
            `SBP Change at 2-Hours` = change.2hr,
            `SBP Change at 6-Hours` = change.6hr)
