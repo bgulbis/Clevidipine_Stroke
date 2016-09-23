@@ -132,7 +132,7 @@ knitr::kable(ptbl[, 1:3], caption = "Stroke")
 ### Stroke
 ```{r stroke_mean, results='asis'}
 # vars <- c("auc.24h", "change.2hr", "change.6hr")
-tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "stroke", ])
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Acute Ischemic Stroke", ])
 ptbl <- print(tbl, printToggle = FALSE)
 knitr::kable(ptbl[, 1:3], caption = "Stroke")
 ```
@@ -145,7 +145,7 @@ knitr::kable(ptbl[, 1:3], caption = "Stroke")
 
 ### ICH
 ```{r ich_mean, results='asis'}
-tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "ich", ])
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Intracerebral Hemorrhage", ])
 ptbl <- print(tbl, printToggle = FALSE)
 knitr::kable(ptbl[, 1:3], caption = "ICH")
 ```

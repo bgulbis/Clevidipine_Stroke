@@ -482,15 +482,196 @@ knitr::kable(ptbl[, 1:3], caption = &quot;Stroke&quot;)</code></pre>
 <h3>Stroke</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB2YXJzIDwtIGMoXCJhdWMuMjRoXCIsIFwiY2hhbmdlLjJoclwiLCBcImNoYW5nZS42aHJcIilcbnRibCA8LSBDcmVhdGVUYWJsZU9uZSh2YXJzLCBcImdyb3VwXCIsIGRmW2RmJGRpYWdub3NpcyA9PSBcInN0cm9rZVwiLCBdKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB2YXJzIDwtIGMoXCJhdWMuMjRoXCIsIFwiY2hhbmdlLjJoclwiLCBcImNoYW5nZS42aHJcIilcbnRibCA8LSBDcmVhdGVUYWJsZU9uZSh2YXJzLCBcImdyb3VwXCIsIGRmW2RmJGRpYWdub3NpcyA9PSBcIkFjdXRlIElzY2hlbWljIFN0cm9rZVwiLCBdKVxucHRibCA8LSBwcmludCh0YmwsIHByaW50VG9nZ2xlID0gRkFMU0UpXG5rbml0cjo6a2FibGUocHRibFssIDE6M10sIGNhcHRpb24gPSBcIlN0cm9rZVwiKVxuYGBgIn0= -->
 <pre class="r"><code># vars &lt;- c(&quot;auc.24h&quot;, &quot;change.2hr&quot;, &quot;change.6hr&quot;)
-tbl &lt;- CreateTableOne(vars, &quot;group&quot;, df[df$diagnosis == &quot;stroke&quot;, ])</code></pre>
+tbl &lt;- CreateTableOne(vars, &quot;group&quot;, df[df$diagnosis == &quot;Acute Ischemic Stroke&quot;, ])
+ptbl &lt;- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = &quot;Stroke&quot;)</code></pre>
 <!-- rnb-source-end -->
-<p>These variables only have NA/NaN: Starting SBP Mean SBP (time-weighted) Final SBP Percent Change in SBP Percent Time Below SBP Goal Minimum SBP Time to Minimum SBP (hours) 24-Hour SBP AUC SBP Change at 2-Hours SBP Change at 6-Hours DroppedError in ModuleStopIfNoVarsLeft(vars) : No valid variables.</p>
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdfX0= -->
+
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Clevidipine</th>
+<th align="left">Nicardipine</th>
+<th align="left">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">n</td>
+<td align="left">37</td>
+<td align="left">40</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Starting SBP (mean (sd))</td>
+<td align="left">198.89 (28.73)</td>
+<td align="left">202.25 (24.96)</td>
+<td align="left">0.585</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean SBP (time-weighted) (mean (sd))</td>
+<td align="left">160.43 (11.05)</td>
+<td align="left">161.10 (14.84)</td>
+<td align="left">0.825</td>
+</tr>
+<tr class="even">
+<td align="left">Final SBP (mean (sd))</td>
+<td align="left">160.68 (21.62)</td>
+<td align="left">155.78 (21.76)</td>
+<td align="left">0.325</td>
+</tr>
+<tr class="odd">
+<td align="left">Percent Change in SBP (mean (sd))</td>
+<td align="left">-0.18 (0.16)</td>
+<td align="left">-0.22 (0.12)</td>
+<td align="left">0.158</td>
+</tr>
+<tr class="even">
+<td align="left">Percent Time Below SBP Goal (mean (sd))</td>
+<td align="left">0.89 (0.12)</td>
+<td align="left">0.84 (0.20)</td>
+<td align="left">0.275</td>
+</tr>
+<tr class="odd">
+<td align="left">Minimum SBP (mean (sd))</td>
+<td align="left">118.57 (20.65)</td>
+<td align="left">119.88 (21.83)</td>
+<td align="left">0.788</td>
+</tr>
+<tr class="even">
+<td align="left">Time to Minimum SBP (hours) (mean (sd))</td>
+<td align="left">10.98 (7.53)</td>
+<td align="left">11.57 (6.74)</td>
+<td align="left">0.719</td>
+</tr>
+<tr class="odd">
+<td align="left">24-Hour SBP AUC (mean (sd))</td>
+<td align="left">3676.64 (579.80)</td>
+<td align="left">3784.14 (367.04)</td>
+<td align="left">0.330</td>
+</tr>
+<tr class="even">
+<td align="left">SBP Change at 2-Hours (mean (sd))</td>
+<td align="left">-35.41 (35.49)</td>
+<td align="left">-29.40 (27.84)</td>
+<td align="left">0.410</td>
+</tr>
+<tr class="odd">
+<td align="left">SBP Change at 6-Hours (mean (sd))</td>
+<td align="left">-41.80 (34.12)</td>
+<td align="left">-38.97 (29.24)</td>
+<td align="left">0.702</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHRibCA8LSBwcmludCh0YmwsIHByaW50VG9nZ2xlID0gRkFMU0UsIG5vbm5vcm1hbCA9IHZhcnMpXG5rbml0cjo6a2FibGUocHRibFssIDE6M10sIGNhcHRpb24gPSBcIlN0cm9rZVwiKVxuYGBgIn0= -->
+<pre class="r"><code>ptbl &lt;- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = &quot;Stroke&quot;)</code></pre>
+<!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdfX0= -->
+
+<table>
+<colgroup>
+<col width="41%" />
+<col width="26%" />
+<col width="26%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Clevidipine</th>
+<th align="left">Nicardipine</th>
+<th align="left">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">n</td>
+<td align="left">37</td>
+<td align="left">40</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Starting SBP (median [IQR])</td>
+<td align="left">196.00 [181.00, 221.00]</td>
+<td align="left">203.00 [185.75, 216.50]</td>
+<td align="left">0.822</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean SBP (time-weighted) (median [IQR])</td>
+<td align="left">161.30 [150.82, 170.32]</td>
+<td align="left">159.86 [151.07, 168.98]</td>
+<td align="left">0.943</td>
+</tr>
+<tr class="even">
+<td align="left">Final SBP (median [IQR])</td>
+<td align="left">170.00 [142.00, 177.00]</td>
+<td align="left">160.00 [141.50, 171.50]</td>
+<td align="left">0.260</td>
+</tr>
+<tr class="odd">
+<td align="left">Percent Change in SBP (median [IQR])</td>
+<td align="left">-0.18 [-0.30, -0.05]</td>
+<td align="left">-0.22 [-0.32, -0.14]</td>
+<td align="left">0.199</td>
+</tr>
+<tr class="even">
+<td align="left">Percent Time Below SBP Goal (median [IQR])</td>
+<td align="left">0.93 [0.81, 0.97]</td>
+<td align="left">0.90 [0.79, 0.97]</td>
+<td align="left">0.691</td>
+</tr>
+<tr class="odd">
+<td align="left">Minimum SBP (median [IQR])</td>
+<td align="left">120.00 [106.00, 133.00]</td>
+<td align="left">118.50 [108.50, 135.50]</td>
+<td align="left">0.895</td>
+</tr>
+<tr class="even">
+<td align="left">Time to Minimum SBP (hours) (median [IQR])</td>
+<td align="left">10.62 [3.67, 17.13]</td>
+<td align="left">9.94 [6.43, 16.66]</td>
+<td align="left">0.665</td>
+</tr>
+<tr class="odd">
+<td align="left">24-Hour SBP AUC (median [IQR])</td>
+<td align="left">3795.92 [3538.15, 3996.02]</td>
+<td align="left">3733.70 [3540.56, 3987.83]</td>
+<td align="left">0.823</td>
+</tr>
+<tr class="even">
+<td align="left">SBP Change at 2-Hours (median [IQR])</td>
+<td align="left">-37.00 [-63.00, -15.00]</td>
+<td align="left">-30.50 [-43.00, -15.75]</td>
+<td align="left">0.305</td>
+</tr>
+<tr class="odd">
+<td align="left">SBP Change at 6-Hours (median [IQR])</td>
+<td align="left">-43.00 [-67.50, -17.00]</td>
+<td align="left">-40.00 [-59.00, -21.50]</td>
+<td align="left">0.721</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -498,10 +679,195 @@ tbl &lt;- CreateTableOne(vars, &quot;group&quot;, df[df$diagnosis == &quot;strok
 <h3>ICH</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGJsIDwtIENyZWF0ZVRhYmxlT25lKHZhcnMsIFwiZ3JvdXBcIiwgZGZbZGYkZGlhZ25vc2lzID09IFwiSW50cmFjZXJlYnJhbCBIZW1vcnJoYWdlXCIsIF0pXG5wdGJsIDwtIHByaW50KHRibCwgcHJpbnRUb2dnbGUgPSBGQUxTRSlcbmtuaXRyOjprYWJsZShwdGJsWywgMTozXSwgY2FwdGlvbiA9IFwiSUNIXCIpXG5gYGAifQ== -->
+<pre class="r"><code>tbl &lt;- CreateTableOne(vars, &quot;group&quot;, df[df$diagnosis == &quot;Intracerebral Hemorrhage&quot;, ])
+ptbl &lt;- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = &quot;ICH&quot;)</code></pre>
+<!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdfX0= -->
+
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Clevidipine</th>
+<th align="left">Nicardipine</th>
+<th align="left">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">n</td>
+<td align="left">33</td>
+<td align="left">100</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Starting SBP (mean (sd))</td>
+<td align="left">200.12 (31.56)</td>
+<td align="left">187.36 (37.32)</td>
+<td align="left">0.080</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean SBP (time-weighted) (mean (sd))</td>
+<td align="left">141.13 (10.29)</td>
+<td align="left">143.28 (8.85)</td>
+<td align="left">0.248</td>
+</tr>
+<tr class="even">
+<td align="left">Final SBP (mean (sd))</td>
+<td align="left">138.64 (19.40)</td>
+<td align="left">135.87 (21.09)</td>
+<td align="left">0.507</td>
+</tr>
+<tr class="odd">
+<td align="left">Percent Change in SBP (mean (sd))</td>
+<td align="left">-0.29 (0.16)</td>
+<td align="left">-0.24 (0.20)</td>
+<td align="left">0.257</td>
+</tr>
+<tr class="even">
+<td align="left">Percent Time Below SBP Goal (mean (sd))</td>
+<td align="left">0.69 (0.21)</td>
+<td align="left">0.68 (0.17)</td>
+<td align="left">0.699</td>
+</tr>
+<tr class="odd">
+<td align="left">Minimum SBP (mean (sd))</td>
+<td align="left">102.18 (16.37)</td>
+<td align="left">104.65 (15.60)</td>
+<td align="left">0.438</td>
+</tr>
+<tr class="even">
+<td align="left">Time to Minimum SBP (hours) (mean (sd))</td>
+<td align="left">11.07 (6.78)</td>
+<td align="left">10.92 (6.97)</td>
+<td align="left">0.914</td>
+</tr>
+<tr class="odd">
+<td align="left">24-Hour SBP AUC (mean (sd))</td>
+<td align="left">3054.54 (721.93)</td>
+<td align="left">3320.35 (363.63)</td>
+<td align="left">0.006</td>
+</tr>
+<tr class="even">
+<td align="left">SBP Change at 2-Hours (mean (sd))</td>
+<td align="left">-45.39 (35.61)</td>
+<td align="left">-29.68 (39.76)</td>
+<td align="left">0.046</td>
+</tr>
+<tr class="odd">
+<td align="left">SBP Change at 6-Hours (mean (sd))</td>
+<td align="left">-58.35 (34.23)</td>
+<td align="left">-46.13 (44.06)</td>
+<td align="left">0.161</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHRibCA8LSBwcmludCh0YmwsIHByaW50VG9nZ2xlID0gRkFMU0UsIG5vbm5vcm1hbCA9IHZhcnMpXG5rbml0cjo6a2FibGUocHRibFssIDE6M10sIGNhcHRpb24gPSBcIklDSFwiKVxuYGBgIn0= -->
+<pre class="r"><code>ptbl &lt;- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = &quot;ICH&quot;)</code></pre>
+<!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdfX0= -->
+
+<table>
+<colgroup>
+<col width="41%" />
+<col width="26%" />
+<col width="26%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Clevidipine</th>
+<th align="left">Nicardipine</th>
+<th align="left">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">n</td>
+<td align="left">33</td>
+<td align="left">100</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Starting SBP (median [IQR])</td>
+<td align="left">202.00 [174.00, 226.00]</td>
+<td align="left">184.00 [164.75, 217.00]</td>
+<td align="left">0.079</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean SBP (time-weighted) (median [IQR])</td>
+<td align="left">138.30 [134.96, 147.42]</td>
+<td align="left">143.89 [137.91, 149.13]</td>
+<td align="left">0.101</td>
+</tr>
+<tr class="even">
+<td align="left">Final SBP (median [IQR])</td>
+<td align="left">140.00 [128.00, 148.00]</td>
+<td align="left">137.50 [124.50, 148.50]</td>
+<td align="left">0.608</td>
+</tr>
+<tr class="odd">
+<td align="left">Percent Change in SBP (median [IQR])</td>
+<td align="left">-0.31 [-0.38, -0.18]</td>
+<td align="left">-0.26 [-0.38, -0.13]</td>
+<td align="left">0.295</td>
+</tr>
+<tr class="even">
+<td align="left">Percent Time Below SBP Goal (median [IQR])</td>
+<td align="left">0.77 [0.56, 0.86]</td>
+<td align="left">0.68 [0.60, 0.79]</td>
+<td align="left">0.229</td>
+</tr>
+<tr class="odd">
+<td align="left">Minimum SBP (median [IQR])</td>
+<td align="left">101.00 [91.00, 114.00]</td>
+<td align="left">107.50 [96.75, 116.00]</td>
+<td align="left">0.256</td>
+</tr>
+<tr class="even">
+<td align="left">Time to Minimum SBP (hours) (median [IQR])</td>
+<td align="left">9.37 [5.62, 15.83]</td>
+<td align="left">10.67 [4.86, 16.05]</td>
+<td align="left">0.859</td>
+</tr>
+<tr class="odd">
+<td align="left">24-Hour SBP AUC (median [IQR])</td>
+<td align="left">3236.86 [3041.75, 3375.73]</td>
+<td align="left">3361.00 [3211.44, 3502.19]</td>
+<td align="left">0.023</td>
+</tr>
+<tr class="even">
+<td align="left">SBP Change at 2-Hours (median [IQR])</td>
+<td align="left">-49.00 [-73.00, -25.00]</td>
+<td align="left">-31.00 [-54.00, -3.00]</td>
+<td align="left">0.037</td>
+</tr>
+<tr class="odd">
+<td align="left">SBP Change at 6-Hours (median [IQR])</td>
+<td align="left">-62.00 [-77.50, -32.00]</td>
+<td align="left">-41.00 [-73.25, -22.25]</td>
+<td align="left">0.129</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -532,7 +898,7 @@ tbl &lt;- CreateTableOne(vars, &quot;group&quot;, df[df$diagnosis == &quot;strok
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIk5pY2FyZGlwaW5lIHZzLiBDbGV2aWRpcGluZSINCm91dHB1dDogDQogICAgaHRtbF9ub3RlYm9vazoNCiAgICAgICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgICAgIHRvYzogeWVzDQogICAgICAgIHRvY19mbG9hdDogeWVzDQotLS0NCg0KYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9DQojIGtuaXRyOjpvcHRzX2NodW5rJHNldChyZXN1bHRzPSdhc2lzJykNCg0KbGlicmFyeShyZWFkeGwpDQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoc3RyaW5ncikNCmxpYnJhcnkoTUVTUykNCmxpYnJhcnkodGFibGVvbmUpDQoNCnNicCA8LSByZWFkX2V4Y2VsKCIuLi9kYXRhL3Jhdy9zYnAueGxzeCIpICU+JQ0KICAgIG11dGF0ZShncm91cCA9IGlmX2Vsc2UoR3JvdXAgPT0gIk4iLCAiTmljYXJkaXBpbmUiLCAiQ2xldmlkaXBpbmUiKSwNCiAgICAgICAgICAgZ29hbCA9IGlmX2Vsc2UoRGlhZ25vc2lzID09IDEsIDE4MCwgMTUwKSwNCiAgICAgICAgICAgZGlhZ25vc2lzID0gaWZfZWxzZShEaWFnbm9zaXMgPT0gMSwgIkFjdXRlIElzY2hlbWljIFN0cm9rZSIsICJJbnRyYWNlcmVicmFsIEhlbW9ycmhhZ2UiKSkgJT4lDQogICAgc2VsZWN0KHBhdGllbnQgPSBgUGF0aWVudCBudW1iZXJgLA0KICAgICAgICAgICBncm91cCwNCiAgICAgICAgICAgZGlhZ25vc2lzLA0KICAgICAgICAgICBhZG1pdCA9IGBBZG1pdCBUaW1lYCwNCiAgICAgICAgICAgbWVkLnRpbWUgPSBUaW1lLA0KICAgICAgICAgICBzYnAgPSBTQlAsDQogICAgICAgICAgIGdvYWwpICU+JQ0KICAgIGFycmFuZ2UocGF0aWVudCwgbWVkLnRpbWUpICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIG11dGF0ZShkdXJhdGlvbiA9IGFzLm51bWVyaWMoZGlmZnRpbWUobWVkLnRpbWUsIGZpcnN0KG1lZC50aW1lKSwgdW5pdHMgPSAiaG91cnMiKSksDQogICAgICAgICAgIGludGVydmFsID0gYXMubnVtZXJpYyhkaWZmdGltZShsZWFkKG1lZC50aW1lKSwgbWVkLnRpbWUsIHVuaXRzID0gImhvdXJzIikpLA0KICAgICAgICAgICBpbnRlcnZhbCA9IGNvYWxlc2NlKGludGVydmFsLCAwKSwNCiAgICAgICAgICAgYXQuZ29hbCA9IHNicCA8PSBnb2FsKQ0KDQpzYnAuYXVjIDwtIHNicCAlPiUNCiAgICBmaWx0ZXIoZHVyYXRpb24gPD0gMjQpICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIHN1bW1hcml6ZShjdW0uZHVyYXRpb24gPSBsYXN0KGR1cmF0aW9uKSwNCiAgICAgICAgICAgICAgc2JwLmZpcnN0ID0gZmlyc3Qoc2JwKSwNCiAgICAgICAgICAgICAgc2JwLmxhc3QgPSBsYXN0KHNicCksDQogICAgICAgICAgICAgIHBlcmMuY2hhbmdlLnNicCA9IChzYnAubGFzdCAtIHNicC5maXJzdCkgLyBzYnAuZmlyc3QsDQogICAgICAgICAgICAgIHNicC5taW4gPSBtaW4oc2JwKSwNCiAgICAgICAgICAgICAgYXVjLjI0aCA9IGF1YyhkdXJhdGlvbiwgc2JwKSwNCiAgICAgICAgICAgICAgc2JwLm1lYW4ud2VpZ2h0ZWQgPSBhdWMuMjRoIC8gY3VtLmR1cmF0aW9uKQ0KDQpzYnAubWluIDwtIHNicCAlPiUNCiAgICBpbm5lcl9qb2luKHNicC5hdWMsIGJ5ID0gInBhdGllbnQiKSAlPiUNCiAgICBmaWx0ZXIoc2JwID09IHNicC5taW4pICU+JQ0KICAgIGFycmFuZ2UocGF0aWVudCwgZHVyYXRpb24pICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIHN1bW1hcml6ZShzYnAubWluLnRpbWUgPSBmaXJzdChkdXJhdGlvbikpDQogICAgDQpzYnAuY2hhbmdlIDwtIHNicCAlPiUNCiAgICBtdXRhdGUoZGlmZjIgPSBhYnMoMiAtIGR1cmF0aW9uKSwNCiAgICAgICAgICAgZGlmZjYgPSBhYnMoNiAtIGR1cmF0aW9uKSkgJT4lDQogICAgZ3JvdXBfYnkocGF0aWVudCkgJT4lDQogICAgZmlsdGVyKGR1cmF0aW9uID09IDAgfCAoZGlmZjIgPT0gbWluKGRpZmYyKSAmIGRpZmYyIDw9IDEpIHwgKGRpZmY2ID09IG1pbihkaWZmNikgJiBkaWZmNiA8PSAxKSkgJT4lDQogICAgbXV0YXRlKGNoYW5nZSA9IHNicCAtIGZpcnN0KHNicCkpICU+JQ0KICAgIGZpbHRlcihkdXJhdGlvbiA+IDApICU+JQ0KICAgIG11dGF0ZShwZXJpb2QgPSBpZl9lbHNlKGRpZmYyIDw9IDEsICJjaGFuZ2UuMmhyIiwgaWZfZWxzZShkaWZmNiA8PSAxLCAiY2hhbmdlLjZociIsIE5BX2NoYXJhY3Rlcl8pKSkgJT4lDQogICAgZ3JvdXBfYnkocGF0aWVudCwgcGVyaW9kKSAlPiUNCiAgICBzdW1tYXJpemUoY2hhbmdlID0gZmlyc3QoY2hhbmdlKSkgJT4lDQogICAgc3ByZWFkKHBlcmlvZCwgY2hhbmdlKQ0KDQpzYnAuZ29hbCA8LSBzYnAgJT4lDQogICAgZmlsdGVyKGR1cmF0aW9uIDw9IDI0LA0KICAgICAgICAgICBhdC5nb2FsID09IFRSVUUpICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIHN1bW1hcml6ZSh0aW1lLmF0LmdvYWwgPSBzdW0oaW50ZXJ2YWwpKQ0KDQpkYXRhLmJwIDwtIHNicCAlPiUNCiAgICB1bmdyb3VwKCkgJT4lDQogICAgZGlzdGluY3QocGF0aWVudCwgZ3JvdXAsIGRpYWdub3NpcykgJT4lDQogICAgbGVmdF9qb2luKHNicC5hdWMsIGJ5ID0gInBhdGllbnQiKSAlPiUNCiAgICBsZWZ0X2pvaW4oc2JwLm1pbiwgYnkgPSAicGF0aWVudCIpICU+JQ0KICAgIGxlZnRfam9pbihzYnAuZ29hbCwgYnkgPSAicGF0aWVudCIpICU+JQ0KICAgIG11dGF0ZShwZXJjLnRpbWUuYXQuZ29hbCA9IHRpbWUuYXQuZ29hbCAvIGN1bS5kdXJhdGlvbikgJT4lDQogICAgbGVmdF9qb2luKHNicC5jaGFuZ2UsIGJ5ID0gInBhdGllbnQiKQ0KDQptZWFuLmJwIDwtIGRhdGEuYnAgJT4lDQogICAgZ3JvdXBfYnkoZ3JvdXAsIGRpYWdub3NpcykgJT4lDQogICAgc3VtbWFyaXplKGF1Yy4yNGgubWVhbiA9IG1lYW4oYXVjLjI0aCwgbmEucm0gPSBUUlVFKSwNCiAgICAgICAgICAgICAgYXVjLjI0aC5zZCA9IHNkKGF1Yy4yNGgsIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgIGF1Yy4yNGguc2UgPSBhdWMuMjRoLnNkIC8gc3FydChsZW5ndGgoYXVjLjI0aCkpLA0KICAgICAgICAgICAgICBjaGFuZ2UuMmhyLm1lYW4gPSBtZWFuKGNoYW5nZS4yaHIsIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgIGNoYW5nZS4yaHIuc2QgPSBzZChjaGFuZ2UuMmhyLCBuYS5ybSA9IFRSVUUpLA0KICAgICAgICAgICAgICBjaGFuZ2UuMmhyLnNlID0gY2hhbmdlLjJoci5zZCAvIHNxcnQobGVuZ3RoKGNoYW5nZS4yaHIpKSwNCiAgICAgICAgICAgICAgY2hhbmdlLjZoci5tZWFuID0gbWVhbihjaGFuZ2UuNmhyLCBuYS5ybSA9IFRSVUUpLA0KICAgICAgICAgICAgICBjaGFuZ2UuNmhyLnNkID0gc2QoY2hhbmdlLjZociwgbmEucm0gPSBUUlVFKSwNCiAgICAgICAgICAgICAgY2hhbmdlLjZoci5zZSA9IGNoYW5nZS42aHIuc2QgLyBzcXJ0KGxlbmd0aChjaGFuZ2UuNmhyKSkpDQoNCiMgd2lsY294LnRlc3QoYXVjLjI0aCB+IGdyb3VwLCBkYXRhID0gZGF0YS5icCwgc3Vic2V0ID0gZGF0YS5icCRkaWFnbm9zaXMgPT0gInN0cm9rZSIpDQoNCiMgdGVzdHMgPC0gZGF0YS5icCAlPiUNCiMgICAgIHNsaWNlX3Jvd3MoImRpYWdub3NpcyIpICU+JQ0KIyAgICAgYnlfc2xpY2UocGFydGlhbCh3aWxjb3gudGVzdCwgYXVjLjI0aCB+IGdyb3VwKSkNCiMgdGVzdHMkLm91dA0KYGBgDQoNCiMjIyBBbGwgUGF0aWVudHMNCg0KKipOb3RlOioqIERhdGEgd2l0aGluIHRoZSBmaXJzdCAyNCBob3VycyBvbmx5Lg0KDQpgYGB7ciBzYnBfYWxsLCByZXN1bHRzPSdhc2lzJ30NCmRmIDwtIGRhdGEuYnAgJT4lDQogICAgc2VsZWN0KHBhdGllbnQsIGdyb3VwLCBkaWFnbm9zaXMsDQogICAgICAgICAgIGBTdGFydGluZyBTQlBgID0gc2JwLmZpcnN0LA0KICAgICAgICAgICBgTWVhbiBTQlAgKHRpbWUtd2VpZ2h0ZWQpYCA9IHNicC5tZWFuLndlaWdodGVkLA0KICAgICAgICAgICBgRmluYWwgU0JQYCA9IHNicC5sYXN0LA0KICAgICAgICAgICBgUGVyY2VudCBDaGFuZ2UgaW4gU0JQYCA9IHBlcmMuY2hhbmdlLnNicCwNCiAgICAgICAgICAgYFBlcmNlbnQgVGltZSBCZWxvdyBTQlAgR29hbGAgPSBwZXJjLnRpbWUuYXQuZ29hbCwNCiAgICAgICAgICAgYE1pbmltdW0gU0JQYCA9IHNicC5taW4sDQogICAgICAgICAgIGBUaW1lIHRvIE1pbmltdW0gU0JQIChob3VycylgID0gc2JwLm1pbi50aW1lLA0KICAgICAgICAgICBgMjQtSG91ciBTQlAgQVVDYCA9IGF1Yy4yNGgsDQogICAgICAgICAgIGBTQlAgQ2hhbmdlIGF0IDItSG91cnNgID0gY2hhbmdlLjJociwNCiAgICAgICAgICAgYFNCUCBDaGFuZ2UgYXQgNi1Ib3Vyc2AgPSBjaGFuZ2UuNmhyKQ0KDQp2YXJzIDwtIG5hbWVzKGRmKVstYygxOjMpXQ0KdGJsIDwtIENyZWF0ZVRhYmxlT25lKHZhcnMsICJncm91cCIsIGRmKQ0KcHRibCA8LSBwcmludCh0YmwsIHByaW50VG9nZ2xlID0gRkFMU0UpDQprbml0cjo6a2FibGUocHRibFssIDE6M10sIGNhcHRpb24gPSAiQWxsIFBhdGllbnRzIikNCmBgYA0KDQpgYGB7ciBzYnBfbWVkaWFuLCByZXN1bHRzPSdhc2lzJ30NCnB0YmwgPC0gcHJpbnQodGJsLCBwcmludFRvZ2dsZSA9IEZBTFNFLCBub25ub3JtYWwgPSB2YXJzKQ0Ka25pdHI6OmthYmxlKHB0YmxbLCAxOjNdLCBjYXB0aW9uID0gIlN0cm9rZSIpDQpgYGANCg0KDQojIyMgU3Ryb2tlDQpgYGB7ciBzdHJva2VfbWVhbiwgcmVzdWx0cz0nYXNpcyd9DQojIHZhcnMgPC0gYygiYXVjLjI0aCIsICJjaGFuZ2UuMmhyIiwgImNoYW5nZS42aHIiKQ0KdGJsIDwtIENyZWF0ZVRhYmxlT25lKHZhcnMsICJncm91cCIsIGRmW2RmJGRpYWdub3NpcyA9PSAic3Ryb2tlIiwgXSkNCnB0YmwgPC0gcHJpbnQodGJsLCBwcmludFRvZ2dsZSA9IEZBTFNFKQ0Ka25pdHI6OmthYmxlKHB0YmxbLCAxOjNdLCBjYXB0aW9uID0gIlN0cm9rZSIpDQpgYGANCg0KYGBge3Igc3Ryb2tlX21lZGlhbiwgcmVzdWx0cz0nYXNpcyd9DQpwdGJsIDwtIHByaW50KHRibCwgcHJpbnRUb2dnbGUgPSBGQUxTRSwgbm9ubm9ybWFsID0gdmFycykNCmtuaXRyOjprYWJsZShwdGJsWywgMTozXSwgY2FwdGlvbiA9ICJTdHJva2UiKQ0KYGBgDQoNCg0KIyMjIElDSA0KYGBge3IgaWNoX21lYW4sIHJlc3VsdHM9J2FzaXMnfQ0KdGJsIDwtIENyZWF0ZVRhYmxlT25lKHZhcnMsICJncm91cCIsIGRmW2RmJGRpYWdub3NpcyA9PSAiaWNoIiwgXSkNCnB0YmwgPC0gcHJpbnQodGJsLCBwcmludFRvZ2dsZSA9IEZBTFNFKQ0Ka25pdHI6OmthYmxlKHB0YmxbLCAxOjNdLCBjYXB0aW9uID0gIklDSCIpDQpgYGANCg0KYGBge3IgaWNoX21lZGlhbiwgcmVzdWx0cz0nYXNpcyd9DQpwdGJsIDwtIHByaW50KHRibCwgcHJpbnRUb2dnbGUgPSBGQUxTRSwgbm9ubm9ybWFsID0gdmFycykNCmtuaXRyOjprYWJsZShwdGJsWywgMTozXSwgY2FwdGlvbiA9ICJJQ0giKQ0KYGBgDQoNCiMjIyBGaWd1cmVzDQoNCmBgYHtyfQ0Kc2JwICU+JQ0KICAgIGZpbHRlcihkdXJhdGlvbiA8IDI1KSAlPiUNCiAgICBnZ3Bsb3QoYWVzKHggPSBkdXJhdGlvbiwgeSA9IHNicCkpICsNCiAgICBnZW9tX3BvaW50KGFlcyhjb2xvciA9IGdyb3VwKSwgYWxwaGEgPSAwLjcsIHNpemUgPSAwLjcpICsNCiAgICBnZW9tX3Ntb290aChhZXMobGluZXR5cGUgPSBncm91cCksIGNvbG9yID0gImJsYWNrIikgKw0KICAgIGdndGl0bGUoIkZpZ3VyZSAxLiBDaGFuZ2UgaW4gc3lzdG9saWMgYmxvb2QgcHJlc3N1cmUiKSArDQogICAgeGxhYigiVGltZSBmcm9tIGFkbWlzc2lvbiAoaG91cnMpIikgKw0KICAgIHlsYWIoIlN5c3RvbGljIGJsb29kIHByZXNzdXJlIChtbUhnKSIpICsNCiAgICBmYWNldF9ncmlkKC4gfiBkaWFnbm9zaXMpICsNCiAgICBzY2FsZV94X2NvbnRpbnVvdXMoYnJlYWtzID0gc2VxKDAsIDI0LCA2KSkgKw0KICAgIHNjYWxlX2xpbmV0eXBlKG5hbWUgPSAiVHJlbmQiKSArDQogICAgIyBzY2FsZV9zaGFwZShuYW1lID0gIlZhbHVlcyIsIHNvbGlkID0gRkFMU0UpICsNCiAgICBzY2FsZV9jb2xvcl9icmV3ZXIocGFsZXR0ZSA9ICJQYWlyZWQiLCBndWlkZSA9IGd1aWRlX2xlZ2VuZCh0aXRsZSA9ICJWYWx1ZXMiKSkgKw0KICAgIHRoZW1lX2J3KCkgKw0KICAgIGNvb3JkX2NhcnRlc2lhbih5bGltID0gYyg1MCwgMjUwKSkNCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIk5pY2FyZGlwaW5lIHZzLiBDbGV2aWRpcGluZSINCm91dHB1dDogDQogICAgaHRtbF9ub3RlYm9vazoNCiAgICAgICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgICAgIHRvYzogeWVzDQogICAgICAgIHRvY19mbG9hdDogeWVzDQotLS0NCg0KYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9DQojIGtuaXRyOjpvcHRzX2NodW5rJHNldChyZXN1bHRzPSdhc2lzJykNCg0KbGlicmFyeShyZWFkeGwpDQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoc3RyaW5ncikNCmxpYnJhcnkoTUVTUykNCmxpYnJhcnkodGFibGVvbmUpDQoNCnNicCA8LSByZWFkX2V4Y2VsKCIuLi9kYXRhL3Jhdy9zYnAueGxzeCIpICU+JQ0KICAgIG11dGF0ZShncm91cCA9IGlmX2Vsc2UoR3JvdXAgPT0gIk4iLCAiTmljYXJkaXBpbmUiLCAiQ2xldmlkaXBpbmUiKSwNCiAgICAgICAgICAgZ29hbCA9IGlmX2Vsc2UoRGlhZ25vc2lzID09IDEsIDE4MCwgMTUwKSwNCiAgICAgICAgICAgZGlhZ25vc2lzID0gaWZfZWxzZShEaWFnbm9zaXMgPT0gMSwgIkFjdXRlIElzY2hlbWljIFN0cm9rZSIsICJJbnRyYWNlcmVicmFsIEhlbW9ycmhhZ2UiKSkgJT4lDQogICAgc2VsZWN0KHBhdGllbnQgPSBgUGF0aWVudCBudW1iZXJgLA0KICAgICAgICAgICBncm91cCwNCiAgICAgICAgICAgZGlhZ25vc2lzLA0KICAgICAgICAgICBhZG1pdCA9IGBBZG1pdCBUaW1lYCwNCiAgICAgICAgICAgbWVkLnRpbWUgPSBUaW1lLA0KICAgICAgICAgICBzYnAgPSBTQlAsDQogICAgICAgICAgIGdvYWwpICU+JQ0KICAgIGFycmFuZ2UocGF0aWVudCwgbWVkLnRpbWUpICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIG11dGF0ZShkdXJhdGlvbiA9IGFzLm51bWVyaWMoZGlmZnRpbWUobWVkLnRpbWUsIGZpcnN0KG1lZC50aW1lKSwgdW5pdHMgPSAiaG91cnMiKSksDQogICAgICAgICAgIGludGVydmFsID0gYXMubnVtZXJpYyhkaWZmdGltZShsZWFkKG1lZC50aW1lKSwgbWVkLnRpbWUsIHVuaXRzID0gImhvdXJzIikpLA0KICAgICAgICAgICBpbnRlcnZhbCA9IGNvYWxlc2NlKGludGVydmFsLCAwKSwNCiAgICAgICAgICAgYXQuZ29hbCA9IHNicCA8PSBnb2FsKQ0KDQpzYnAuYXVjIDwtIHNicCAlPiUNCiAgICBmaWx0ZXIoZHVyYXRpb24gPD0gMjQpICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIHN1bW1hcml6ZShjdW0uZHVyYXRpb24gPSBsYXN0KGR1cmF0aW9uKSwNCiAgICAgICAgICAgICAgc2JwLmZpcnN0ID0gZmlyc3Qoc2JwKSwNCiAgICAgICAgICAgICAgc2JwLmxhc3QgPSBsYXN0KHNicCksDQogICAgICAgICAgICAgIHBlcmMuY2hhbmdlLnNicCA9IChzYnAubGFzdCAtIHNicC5maXJzdCkgLyBzYnAuZmlyc3QsDQogICAgICAgICAgICAgIHNicC5taW4gPSBtaW4oc2JwKSwNCiAgICAgICAgICAgICAgYXVjLjI0aCA9IGF1YyhkdXJhdGlvbiwgc2JwKSwNCiAgICAgICAgICAgICAgc2JwLm1lYW4ud2VpZ2h0ZWQgPSBhdWMuMjRoIC8gY3VtLmR1cmF0aW9uKQ0KDQpzYnAubWluIDwtIHNicCAlPiUNCiAgICBpbm5lcl9qb2luKHNicC5hdWMsIGJ5ID0gInBhdGllbnQiKSAlPiUNCiAgICBmaWx0ZXIoc2JwID09IHNicC5taW4pICU+JQ0KICAgIGFycmFuZ2UocGF0aWVudCwgZHVyYXRpb24pICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIHN1bW1hcml6ZShzYnAubWluLnRpbWUgPSBmaXJzdChkdXJhdGlvbikpDQogICAgDQpzYnAuY2hhbmdlIDwtIHNicCAlPiUNCiAgICBtdXRhdGUoZGlmZjIgPSBhYnMoMiAtIGR1cmF0aW9uKSwNCiAgICAgICAgICAgZGlmZjYgPSBhYnMoNiAtIGR1cmF0aW9uKSkgJT4lDQogICAgZ3JvdXBfYnkocGF0aWVudCkgJT4lDQogICAgZmlsdGVyKGR1cmF0aW9uID09IDAgfCAoZGlmZjIgPT0gbWluKGRpZmYyKSAmIGRpZmYyIDw9IDEpIHwgKGRpZmY2ID09IG1pbihkaWZmNikgJiBkaWZmNiA8PSAxKSkgJT4lDQogICAgbXV0YXRlKGNoYW5nZSA9IHNicCAtIGZpcnN0KHNicCkpICU+JQ0KICAgIGZpbHRlcihkdXJhdGlvbiA+IDApICU+JQ0KICAgIG11dGF0ZShwZXJpb2QgPSBpZl9lbHNlKGRpZmYyIDw9IDEsICJjaGFuZ2UuMmhyIiwgaWZfZWxzZShkaWZmNiA8PSAxLCAiY2hhbmdlLjZociIsIE5BX2NoYXJhY3Rlcl8pKSkgJT4lDQogICAgZ3JvdXBfYnkocGF0aWVudCwgcGVyaW9kKSAlPiUNCiAgICBzdW1tYXJpemUoY2hhbmdlID0gZmlyc3QoY2hhbmdlKSkgJT4lDQogICAgc3ByZWFkKHBlcmlvZCwgY2hhbmdlKQ0KDQpzYnAuZ29hbCA8LSBzYnAgJT4lDQogICAgZmlsdGVyKGR1cmF0aW9uIDw9IDI0LA0KICAgICAgICAgICBhdC5nb2FsID09IFRSVUUpICU+JQ0KICAgIGdyb3VwX2J5KHBhdGllbnQpICU+JQ0KICAgIHN1bW1hcml6ZSh0aW1lLmF0LmdvYWwgPSBzdW0oaW50ZXJ2YWwpKQ0KDQpkYXRhLmJwIDwtIHNicCAlPiUNCiAgICB1bmdyb3VwKCkgJT4lDQogICAgZGlzdGluY3QocGF0aWVudCwgZ3JvdXAsIGRpYWdub3NpcykgJT4lDQogICAgbGVmdF9qb2luKHNicC5hdWMsIGJ5ID0gInBhdGllbnQiKSAlPiUNCiAgICBsZWZ0X2pvaW4oc2JwLm1pbiwgYnkgPSAicGF0aWVudCIpICU+JQ0KICAgIGxlZnRfam9pbihzYnAuZ29hbCwgYnkgPSAicGF0aWVudCIpICU+JQ0KICAgIG11dGF0ZShwZXJjLnRpbWUuYXQuZ29hbCA9IHRpbWUuYXQuZ29hbCAvIGN1bS5kdXJhdGlvbikgJT4lDQogICAgbGVmdF9qb2luKHNicC5jaGFuZ2UsIGJ5ID0gInBhdGllbnQiKQ0KDQptZWFuLmJwIDwtIGRhdGEuYnAgJT4lDQogICAgZ3JvdXBfYnkoZ3JvdXAsIGRpYWdub3NpcykgJT4lDQogICAgc3VtbWFyaXplKGF1Yy4yNGgubWVhbiA9IG1lYW4oYXVjLjI0aCwgbmEucm0gPSBUUlVFKSwNCiAgICAgICAgICAgICAgYXVjLjI0aC5zZCA9IHNkKGF1Yy4yNGgsIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgIGF1Yy4yNGguc2UgPSBhdWMuMjRoLnNkIC8gc3FydChsZW5ndGgoYXVjLjI0aCkpLA0KICAgICAgICAgICAgICBjaGFuZ2UuMmhyLm1lYW4gPSBtZWFuKGNoYW5nZS4yaHIsIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgIGNoYW5nZS4yaHIuc2QgPSBzZChjaGFuZ2UuMmhyLCBuYS5ybSA9IFRSVUUpLA0KICAgICAgICAgICAgICBjaGFuZ2UuMmhyLnNlID0gY2hhbmdlLjJoci5zZCAvIHNxcnQobGVuZ3RoKGNoYW5nZS4yaHIpKSwNCiAgICAgICAgICAgICAgY2hhbmdlLjZoci5tZWFuID0gbWVhbihjaGFuZ2UuNmhyLCBuYS5ybSA9IFRSVUUpLA0KICAgICAgICAgICAgICBjaGFuZ2UuNmhyLnNkID0gc2QoY2hhbmdlLjZociwgbmEucm0gPSBUUlVFKSwNCiAgICAgICAgICAgICAgY2hhbmdlLjZoci5zZSA9IGNoYW5nZS42aHIuc2QgLyBzcXJ0KGxlbmd0aChjaGFuZ2UuNmhyKSkpDQoNCiMgd2lsY294LnRlc3QoYXVjLjI0aCB+IGdyb3VwLCBkYXRhID0gZGF0YS5icCwgc3Vic2V0ID0gZGF0YS5icCRkaWFnbm9zaXMgPT0gInN0cm9rZSIpDQoNCiMgdGVzdHMgPC0gZGF0YS5icCAlPiUNCiMgICAgIHNsaWNlX3Jvd3MoImRpYWdub3NpcyIpICU+JQ0KIyAgICAgYnlfc2xpY2UocGFydGlhbCh3aWxjb3gudGVzdCwgYXVjLjI0aCB+IGdyb3VwKSkNCiMgdGVzdHMkLm91dA0KYGBgDQoNCiMjIyBBbGwgUGF0aWVudHMNCg0KKipOb3RlOioqIERhdGEgd2l0aGluIHRoZSBmaXJzdCAyNCBob3VycyBvbmx5Lg0KDQpgYGB7ciBzYnBfYWxsLCByZXN1bHRzPSdhc2lzJ30NCmRmIDwtIGRhdGEuYnAgJT4lDQogICAgc2VsZWN0KHBhdGllbnQsIGdyb3VwLCBkaWFnbm9zaXMsDQogICAgICAgICAgIGBTdGFydGluZyBTQlBgID0gc2JwLmZpcnN0LA0KICAgICAgICAgICBgTWVhbiBTQlAgKHRpbWUtd2VpZ2h0ZWQpYCA9IHNicC5tZWFuLndlaWdodGVkLA0KICAgICAgICAgICBgRmluYWwgU0JQYCA9IHNicC5sYXN0LA0KICAgICAgICAgICBgUGVyY2VudCBDaGFuZ2UgaW4gU0JQYCA9IHBlcmMuY2hhbmdlLnNicCwNCiAgICAgICAgICAgYFBlcmNlbnQgVGltZSBCZWxvdyBTQlAgR29hbGAgPSBwZXJjLnRpbWUuYXQuZ29hbCwNCiAgICAgICAgICAgYE1pbmltdW0gU0JQYCA9IHNicC5taW4sDQogICAgICAgICAgIGBUaW1lIHRvIE1pbmltdW0gU0JQIChob3VycylgID0gc2JwLm1pbi50aW1lLA0KICAgICAgICAgICBgMjQtSG91ciBTQlAgQVVDYCA9IGF1Yy4yNGgsDQogICAgICAgICAgIGBTQlAgQ2hhbmdlIGF0IDItSG91cnNgID0gY2hhbmdlLjJociwNCiAgICAgICAgICAgYFNCUCBDaGFuZ2UgYXQgNi1Ib3Vyc2AgPSBjaGFuZ2UuNmhyKQ0KDQp2YXJzIDwtIG5hbWVzKGRmKVstYygxOjMpXQ0KdGJsIDwtIENyZWF0ZVRhYmxlT25lKHZhcnMsICJncm91cCIsIGRmKQ0KcHRibCA8LSBwcmludCh0YmwsIHByaW50VG9nZ2xlID0gRkFMU0UpDQprbml0cjo6a2FibGUocHRibFssIDE6M10sIGNhcHRpb24gPSAiQWxsIFBhdGllbnRzIikNCmBgYA0KDQpgYGB7ciBzYnBfbWVkaWFuLCByZXN1bHRzPSdhc2lzJ30NCnB0YmwgPC0gcHJpbnQodGJsLCBwcmludFRvZ2dsZSA9IEZBTFNFLCBub25ub3JtYWwgPSB2YXJzKQ0Ka25pdHI6OmthYmxlKHB0YmxbLCAxOjNdLCBjYXB0aW9uID0gIlN0cm9rZSIpDQpgYGANCg0KDQojIyMgU3Ryb2tlDQpgYGB7ciBzdHJva2VfbWVhbiwgcmVzdWx0cz0nYXNpcyd9DQojIHZhcnMgPC0gYygiYXVjLjI0aCIsICJjaGFuZ2UuMmhyIiwgImNoYW5nZS42aHIiKQ0KdGJsIDwtIENyZWF0ZVRhYmxlT25lKHZhcnMsICJncm91cCIsIGRmW2RmJGRpYWdub3NpcyA9PSAiQWN1dGUgSXNjaGVtaWMgU3Ryb2tlIiwgXSkNCnB0YmwgPC0gcHJpbnQodGJsLCBwcmludFRvZ2dsZSA9IEZBTFNFKQ0Ka25pdHI6OmthYmxlKHB0YmxbLCAxOjNdLCBjYXB0aW9uID0gIlN0cm9rZSIpDQpgYGANCg0KYGBge3Igc3Ryb2tlX21lZGlhbiwgcmVzdWx0cz0nYXNpcyd9DQpwdGJsIDwtIHByaW50KHRibCwgcHJpbnRUb2dnbGUgPSBGQUxTRSwgbm9ubm9ybWFsID0gdmFycykNCmtuaXRyOjprYWJsZShwdGJsWywgMTozXSwgY2FwdGlvbiA9ICJTdHJva2UiKQ0KYGBgDQoNCg0KIyMjIElDSA0KYGBge3IgaWNoX21lYW4sIHJlc3VsdHM9J2FzaXMnfQ0KdGJsIDwtIENyZWF0ZVRhYmxlT25lKHZhcnMsICJncm91cCIsIGRmW2RmJGRpYWdub3NpcyA9PSAiSW50cmFjZXJlYnJhbCBIZW1vcnJoYWdlIiwgXSkNCnB0YmwgPC0gcHJpbnQodGJsLCBwcmludFRvZ2dsZSA9IEZBTFNFKQ0Ka25pdHI6OmthYmxlKHB0YmxbLCAxOjNdLCBjYXB0aW9uID0gIklDSCIpDQpgYGANCg0KYGBge3IgaWNoX21lZGlhbiwgcmVzdWx0cz0nYXNpcyd9DQpwdGJsIDwtIHByaW50KHRibCwgcHJpbnRUb2dnbGUgPSBGQUxTRSwgbm9ubm9ybWFsID0gdmFycykNCmtuaXRyOjprYWJsZShwdGJsWywgMTozXSwgY2FwdGlvbiA9ICJJQ0giKQ0KYGBgDQoNCiMjIyBGaWd1cmVzDQoNCmBgYHtyfQ0Kc2JwICU+JQ0KICAgIGZpbHRlcihkdXJhdGlvbiA8IDI1KSAlPiUNCiAgICBnZ3Bsb3QoYWVzKHggPSBkdXJhdGlvbiwgeSA9IHNicCkpICsNCiAgICBnZW9tX3BvaW50KGFlcyhjb2xvciA9IGdyb3VwKSwgYWxwaGEgPSAwLjcsIHNpemUgPSAwLjcpICsNCiAgICBnZW9tX3Ntb290aChhZXMobGluZXR5cGUgPSBncm91cCksIGNvbG9yID0gImJsYWNrIikgKw0KICAgIGdndGl0bGUoIkZpZ3VyZSAxLiBDaGFuZ2UgaW4gc3lzdG9saWMgYmxvb2QgcHJlc3N1cmUiKSArDQogICAgeGxhYigiVGltZSBmcm9tIGFkbWlzc2lvbiAoaG91cnMpIikgKw0KICAgIHlsYWIoIlN5c3RvbGljIGJsb29kIHByZXNzdXJlIChtbUhnKSIpICsNCiAgICBmYWNldF9ncmlkKC4gfiBkaWFnbm9zaXMpICsNCiAgICBzY2FsZV94X2NvbnRpbnVvdXMoYnJlYWtzID0gc2VxKDAsIDI0LCA2KSkgKw0KICAgIHNjYWxlX2xpbmV0eXBlKG5hbWUgPSAiVHJlbmQiKSArDQogICAgIyBzY2FsZV9zaGFwZShuYW1lID0gIlZhbHVlcyIsIHNvbGlkID0gRkFMU0UpICsNCiAgICBzY2FsZV9jb2xvcl9icmV3ZXIocGFsZXR0ZSA9ICJQYWlyZWQiLCBndWlkZSA9IGd1aWRlX2xlZ2VuZCh0aXRsZSA9ICJWYWx1ZXMiKSkgKw0KICAgIHRoZW1lX2J3KCkgKw0KICAgIGNvb3JkX2NhcnRlc2lhbih5bGltID0gYyg1MCwgMjUwKSkNCmBgYA0K</div>
 
 
 </div>
