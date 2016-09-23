@@ -99,7 +99,58 @@ mean.bp <- data.bp %>%
 # tests$.out
 ```
 
-### All Patients
+
+## Primary Outcome
+
+#### All Patients
+
+```{r primary_all, results='asis'}
+df <- sbp %>%
+    filter(sbp <= goal) %>%
+    arrange(patient, duration) %>%
+    distinct(patient, .keep_all = TRUE) %>%
+    select(patient, group, diagnosis, `Time from Admit to Goal SBP (hours)` = duration)
+
+vars <- names(df)[-c(1:3)]
+tbl <- CreateTableOne(vars, "group", df)
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "All Patients")
+```
+
+```{r primary_all_median, results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "All")
+```
+
+#### Stroke
+
+```{r stroke_primary, results='asis'}
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Acute Ischemic Stroke", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+```{r stroke_primary_median, results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+#### ICH
+
+```{r ich_primary, results='asis'}
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Intracerebral Hemorrhage", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "ICH")
+```
+
+```{r ich_primary_median, results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "ICH")
+```
+
+## Secondary Outcomes
+
+#### All Patients
 
 **Note:** Data within the first 24 hours only.
 
@@ -174,3 +225,13 @@ sbp %>%
     theme_bw() +
     coord_cartesian(ylim = c(50, 250))
 ```
+
+```{r}
+ggplot(sbp, aes(x = sbp)) +
+    geom_histogram(binwidth = 5) 
+```
+
+```{r}
+qqnorm(sbp$sbp)
+```
+
