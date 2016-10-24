@@ -28,13 +28,41 @@ sbp <- read_excel("../data/raw/sbp.xlsx") %>%
            sbp = SBP,
            goal) %>%
     arrange(patient, med.time) %>%
+    filter(med.time >= admit) %>%
     group_by(patient) %>%
     mutate(duration = as.numeric(difftime(med.time, first(med.time), units = "hours")),
            interval = as.numeric(difftime(lead(med.time), med.time, units = "hours")),
            interval = coalesce(interval, 0),
            at.goal = sbp <= goal)
 
+drip_start <- read_excel("../data/raw/bp_drip_start.xlsx") %>%
+    select(patient = `Patient number`,
+           sbp_admit = `Admit SBP`,
+           sbp_drip = `Drip StartSBP`) %>%
+    left_join(sbp[c("patient", "med.time", "sbp")], by = c("patient", "sbp_drip" = "sbp")) %>%
+    arrange(patient, med.time) %>%
+    distinct(patient, .keep_all = TRUE) %>%
+    rename(drip.datetime = med.time)
+
+sbp_drip <- left_join(sbp, drip_start[c("patient", "drip.datetime")], by = "patient") %>%
+    filter(med.time >= drip.datetime) %>%
+    mutate(duration = as.numeric(difftime(med.time, first(med.time), units = "hours")),
+           interval = as.numeric(difftime(lead(med.time), med.time, units = "hours")),
+           interval = coalesce(interval, 0),
+           at.goal = sbp <= goal)
+
 sbp.auc <- sbp %>%
+    filter(duration <= 24) %>%
+    group_by(patient) %>%
+    summarize(cum.duration = last(duration),
+              sbp.first = first(sbp),
+              sbp.last = last(sbp),
+              perc.change.sbp = (sbp.last - sbp.first) / sbp.first,
+              sbp.min = min(sbp),
+              auc.24h = auc(duration, sbp),
+              sbp.mean.weighted = auc.24h / cum.duration)
+
+sbp_drip_auc <- sbp_drip %>%
     filter(duration <= 24) %>%
     group_by(patient) %>%
     summarize(cum.duration = last(duration),
@@ -52,7 +80,26 @@ sbp.min <- sbp %>%
     group_by(patient) %>%
     summarize(sbp.min.time = first(duration))
     
+sbp_drip_min <- sbp_drip %>%
+    inner_join(sbp.auc, by = "patient") %>%
+    filter(sbp == sbp.min) %>%
+    arrange(patient, duration) %>%
+    group_by(patient) %>%
+    summarize(sbp.min.time = first(duration))
+
 sbp.change <- sbp %>%
+    mutate(diff2 = abs(2 - duration),
+           diff6 = abs(6 - duration)) %>%
+    group_by(patient) %>%
+    filter(duration == 0 | (diff2 == min(diff2) & diff2 <= 1) | (diff6 == min(diff6) & diff6 <= 1)) %>%
+    mutate(change = sbp - first(sbp)) %>%
+    filter(duration > 0) %>%
+    mutate(period = if_else(diff2 <= 1, "change.2hr", if_else(diff6 <= 1, "change.6hr", NA_character_))) %>%
+    group_by(patient, period) %>%
+    summarize(change = first(change)) %>%
+    spread(period, change)
+
+sbp_drip_change <- sbp_drip %>%
     mutate(diff2 = abs(2 - duration),
            diff6 = abs(6 - duration)) %>%
     group_by(patient) %>%
@@ -70,6 +117,12 @@ sbp.goal <- sbp %>%
     group_by(patient) %>%
     summarize(time.at.goal = sum(interval))
 
+sbp_drip_goal <- sbp_drip %>%
+    filter(duration <= 24,
+           at.goal == TRUE) %>%
+    group_by(patient) %>%
+    summarize(time.at.goal = sum(interval))
+
 data.bp <- sbp %>%
     ungroup() %>%
     distinct(patient, group, diagnosis) %>%
@@ -78,6 +131,15 @@ data.bp <- sbp %>%
     left_join(sbp.goal, by = "patient") %>%
     mutate(perc.time.at.goal = time.at.goal / cum.duration) %>%
     left_join(sbp.change, by = "patient")
+
+data_drip_bp <- sbp_drip %>%
+    ungroup() %>%
+    distinct(patient, group, diagnosis) %>%
+    left_join(sbp_drip_auc, by = "patient") %>%
+    left_join(sbp_drip_min, by = "patient") %>%
+    left_join(sbp_drip_goal, by = "patient") %>%
+    mutate(perc.time.at.goal = time.at.goal / cum.duration) %>%
+    left_join(sbp_drip_change, by = "patient")
 
 mean.bp <- data.bp %>%
     group_by(group, diagnosis) %>%
@@ -90,6 +152,19 @@ mean.bp <- data.bp %>%
               change.6hr.mean = mean(change.6hr, na.rm = TRUE),
               change.6hr.sd = sd(change.6hr, na.rm = TRUE),
               change.6hr.se = change.6hr.sd / sqrt(length(change.6hr)))
+
+mean_drip_bp <- data_drip_bp %>%
+    group_by(group, diagnosis) %>%
+    summarize(auc.24h.mean = mean(auc.24h, na.rm = TRUE),
+              auc.24h.sd = sd(auc.24h, na.rm = TRUE),
+              auc.24h.se = auc.24h.sd / sqrt(length(auc.24h)),
+              change.2hr.mean = mean(change.2hr, na.rm = TRUE),
+              change.2hr.sd = sd(change.2hr, na.rm = TRUE),
+              change.2hr.se = change.2hr.sd / sqrt(length(change.2hr)),
+              change.6hr.mean = mean(change.6hr, na.rm = TRUE),
+              change.6hr.sd = sd(change.6hr, na.rm = TRUE),
+              change.6hr.se = change.6hr.sd / sqrt(length(change.6hr)))
+
 
 # wilcox.test(auc.24h ~ group, data = data.bp, subset = data.bp$diagnosis == "stroke")
 
@@ -150,6 +225,54 @@ knitr::kable(ptbl[, 1:3], caption = "ICH")
 
 ## Secondary Outcomes
 
+### Drip Initiation
+
+```{r results='asis'}
+df <- sbp_drip %>%
+    filter(sbp <= goal) %>%
+    arrange(patient, duration) %>%
+    distinct(patient, .keep_all = TRUE) %>%
+    select(patient, group, diagnosis, `Time from Drip Initiation to Goal SBP (hours)` = duration)
+
+vars <- names(df)[-c(1:3)]
+tbl <- CreateTableOne(vars, "group", df)
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "All Patients")
+```
+
+```{r results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "All")
+```
+
+#### Stroke
+
+```{r results='asis'}
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Acute Ischemic Stroke", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+```{r results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+#### ICH
+
+```{r results='asis'}
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Intracerebral Hemorrhage", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "ICH")
+```
+
+```{r results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "ICH")
+```
+
+### Summary Statistics
+
 #### All Patients
 
 **Note:** Data within the first 24 hours only.
@@ -157,7 +280,7 @@ knitr::kable(ptbl[, 1:3], caption = "ICH")
 ```{r sbp_all, results='asis'}
 df <- data.bp %>%
     select(patient, group, diagnosis,
-           `Starting SBP` = sbp.first,
+           `First SBP` = sbp.first,
            `Mean SBP (time-weighted)` = sbp.mean.weighted,
            `Final SBP` = sbp.last,
            `Percent Change in SBP` = perc.change.sbp,
@@ -179,8 +302,7 @@ ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
 knitr::kable(ptbl[, 1:3], caption = "Stroke")
 ```
 
-
-### Stroke
+#### Stroke
 ```{r stroke_mean, results='asis'}
 # vars <- c("auc.24h", "change.2hr", "change.6hr")
 tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Acute Ischemic Stroke", ])
@@ -193,8 +315,7 @@ ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
 knitr::kable(ptbl[, 1:3], caption = "Stroke")
 ```
 
-
-### ICH
+#### ICH
 ```{r ich_mean, results='asis'}
 tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Intracerebral Hemorrhage", ])
 ptbl <- print(tbl, printToggle = FALSE)
@@ -206,7 +327,63 @@ ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
 knitr::kable(ptbl[, 1:3], caption = "ICH")
 ```
 
-### Figures
+### Summary from Drip Initiation
+
+#### All Patients
+
+**Note:** Data within the first 24 hours only.
+
+```{r results='asis'}
+df <- data_drip_bp %>%
+    select(patient, group, diagnosis,
+           `First SBP` = sbp.first,
+           `Mean SBP (time-weighted)` = sbp.mean.weighted,
+           `Final SBP` = sbp.last,
+           `Percent Change in SBP` = perc.change.sbp,
+           `Percent Time Below SBP Goal` = perc.time.at.goal,
+           `Minimum SBP` = sbp.min,
+           `Time to Minimum SBP (hours)` = sbp.min.time,
+           `24-Hour SBP AUC` = auc.24h,
+           `SBP Change at 2-Hours` = change.2hr,
+           `SBP Change at 6-Hours` = change.6hr)
+
+vars <- names(df)[-c(1:3)]
+tbl <- CreateTableOne(vars, "group", df)
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "All Patients")
+```
+
+```{r results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+#### Stroke
+```{r results='asis'}
+# vars <- c("auc.24h", "change.2hr", "change.6hr")
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Acute Ischemic Stroke", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+```{r results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "Stroke")
+```
+
+#### ICH
+```{r results='asis'}
+tbl <- CreateTableOne(vars, "group", df[df$diagnosis == "Intracerebral Hemorrhage", ])
+ptbl <- print(tbl, printToggle = FALSE)
+knitr::kable(ptbl[, 1:3], caption = "ICH")
+```
+
+```{r results='asis'}
+ptbl <- print(tbl, printToggle = FALSE, nonnormal = vars)
+knitr::kable(ptbl[, 1:3], caption = "ICH")
+```
+
+## Figures
 
 ```{r}
 sbp %>%
@@ -225,6 +402,26 @@ sbp %>%
     theme_bw() +
     coord_cartesian(ylim = c(50, 250))
 ```
+
+```{r}
+sbp_drip %>%
+    filter(duration < 25) %>%
+    ggplot(aes(x = duration, y = sbp)) +
+    geom_point(aes(color = group), alpha = 0.7, size = 0.7) +
+    geom_smooth(aes(linetype = group), color = "black") +
+    ggtitle("Figure 2. Change in systolic blood pressure from drip initiation") +
+    xlab("Time from drip initiation (hours)") +
+    ylab("Systolic blood pressure (mmHg)") +
+    facet_grid(. ~ diagnosis) +
+    scale_x_continuous(breaks = seq(0, 24, 6)) +
+    scale_linetype(name = "Trend") +
+    # scale_shape(name = "Values", solid = FALSE) +
+    scale_color_brewer(palette = "Paired", guide = guide_legend(title = "Values")) +
+    theme_bw() +
+    coord_cartesian(ylim = c(50, 250))
+```
+
+## Distribution
 
 ```{r}
 ggplot(sbp, aes(x = sbp)) +
