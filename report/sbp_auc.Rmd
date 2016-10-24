@@ -245,7 +245,7 @@ knitr::kable(ptbl[, 1:3], caption = "ICH")
 
 #### All Patients
 
-**Note:** Data within the first 24 hours only.
+**Note:** Data within the first 24 hours from time of admission
 
 ```{r sbp_all, results='asis'}
 df <- data.bp %>%
@@ -286,7 +286,7 @@ knitr::kable(ptbl[, 1:3], caption = "ICH")
 
 #### All Patients
 
-**Note:** Data within the first 24 hours only.
+**Note:** Data within the first 24 hours from time of drip initation
 
 ```{r results='asis'}
 df <- data_drip_bp %>%
