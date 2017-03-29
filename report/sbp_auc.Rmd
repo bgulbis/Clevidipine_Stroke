@@ -347,14 +347,14 @@ library(themebg)
 sbp_drip %>%
     filter(duration < 25) %>%
     ggplot(aes(x = duration, y = sbp)) +
-    geom_point(aes(shape = group), alpha = 0.3) +
+    # geom_point(aes(shape = group), alpha = 0.3) +
     geom_smooth(aes(linetype = group), color = "black") +
     ggtitle("Figure 1. Change in systolic blood pressure from drip initiation") +
     facet_grid(. ~ diagnosis) +
     scale_x_continuous("Time from drip initiation (hours)", breaks = seq(0, 24, 6)) +
     scale_y_continuous("Systolic blood pressure (mmHg)", breaks = seq(0, 300, 50)) +
     scale_linetype(name = "SBP Trend") +
-    scale_shape_manual(name = "SBP Values", values = c(1, )) +
+    scale_shape_manual(name = "SBP Values", values = c(1, 2)) +
     # scale_color_brewer(palette = "Paired", guide = guide_legend(title = "Values")) +
     theme_bg()
     # coord_cartesian(ylim = c(50, 250))
