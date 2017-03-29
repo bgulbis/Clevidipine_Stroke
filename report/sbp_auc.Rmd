@@ -343,22 +343,38 @@ sbp %>%
 ```
 
 ```{r}
+library(themebg)
 sbp_drip %>%
     filter(duration < 25) %>%
     ggplot(aes(x = duration, y = sbp)) +
-    geom_point(aes(color = group), alpha = 0.7, size = 0.7) +
+    geom_point(aes(shape = group), alpha = 0.3) +
     geom_smooth(aes(linetype = group), color = "black") +
-    ggtitle("Figure 2. Change in systolic blood pressure from drip initiation") +
+    ggtitle("Figure 1. Change in systolic blood pressure from drip initiation") +
+    facet_grid(. ~ diagnosis) +
+    scale_x_continuous("Time from drip initiation (hours)", breaks = seq(0, 24, 6)) +
+    scale_y_continuous("Systolic blood pressure (mmHg)", breaks = seq(0, 300, 50)) +
+    scale_linetype(name = "SBP Trend") +
+    scale_shape_manual(name = "SBP Values", values = c(1, )) +
+    # scale_color_brewer(palette = "Paired", guide = guide_legend(title = "Values")) +
+    theme_bg()
+    # coord_cartesian(ylim = c(50, 250))
+```
+
+```{r}
+sbp_drip %>%
+    filter(duration < 25) %>%
+    mutate(diff_goal = sbp - goal) %>%
+    ggplot(aes(x = duration, y = diff_goal)) +
+    geom_smooth(aes(linetype = group), color = "black") +
+    ggtitle("Figure 3. Systolic blood pressure difference from goal") +
     xlab("Time from drip initiation (hours)") +
-    ylab("Systolic blood pressure (mmHg)") +
+    ylab("Systolic blood pressure difference (mmHg)") +
     facet_grid(. ~ diagnosis) +
     scale_x_continuous(breaks = seq(0, 24, 6)) +
-    scale_linetype(name = "Trend") +
-    # scale_shape(name = "Values", solid = FALSE) +
-    scale_color_brewer(palette = "Paired", guide = guide_legend(title = "Values")) +
-    theme_bw() +
-    coord_cartesian(ylim = c(50, 250))
+    scale_linetype(name = "Group") +
+    theme_bw() 
 ```
+
 
 ## Distribution
 
