@@ -1,10 +1,15 @@
 ---
 title: "Nicardipine vs. Clevidipine"
-output: 
-    html_notebook:
-        code_folding: hide
-        toc: yes
-        toc_float: yes
+output:
+  html_document:
+    code_folding: hide
+    fig_caption: yes
+    toc: yes
+    toc_float: yes
+  html_notebook:
+    code_folding: hide
+    toc: yes
+    toc_float: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -15,6 +20,7 @@ library(tidyverse)
 library(stringr)
 library(MESS)
 library(tableone)
+library(themebg)
 
 sbp <- read_excel("../data/raw/sbp.xlsx") %>%
     mutate(group = if_else(Group == "N", "Nicardipine", "Clevidipine"),
@@ -324,7 +330,7 @@ knitr::kable(ptbl[, 1:3], caption = "ICH")
 
 ## Figures
 
-```{r}
+```{r, eval=FALSE}
 sbp %>%
     filter(duration < 25) %>%
     ggplot(aes(x = duration, y = sbp)) +
@@ -342,25 +348,27 @@ sbp %>%
     coord_cartesian(ylim = c(50, 250))
 ```
 
-```{r}
-library(themebg)
+```{r, message=FALSE, fig.cap="Change in systolic blood pressure from drip initiation"}
+sbp_hourly <- sbp_drip %>%
+    mutate(hour = floor(duration)) %>%
+    distinct(patient, hour, .keep_all = TRUE)
+
 sbp_drip %>%
     filter(duration < 25) %>%
-    ggplot(aes(x = duration, y = sbp)) +
-    # geom_point(aes(shape = group), alpha = 0.3) +
-    geom_smooth(aes(linetype = group), color = "black") +
-    ggtitle("Figure 1. Change in systolic blood pressure from drip initiation") +
+    ggplot() +
+    geom_point(data = sbp_hourly, aes(x = duration, y = sbp, shape = group), alpha = 0.4, size = 0.8) +
+    geom_smooth(aes(x = duration, y = sbp, linetype = group), color = "black") +
     facet_grid(. ~ diagnosis) +
     scale_x_continuous("Time from drip initiation (hours)", breaks = seq(0, 24, 6)) +
-    scale_y_continuous("Systolic blood pressure (mmHg)", breaks = seq(0, 300, 50)) +
+    scale_y_continuous("Systolic blood pressure (mmHg)", breaks = seq(0, 300, 25)) +
     scale_linetype(name = "SBP Trend") +
-    scale_shape_manual(name = "SBP Values", values = c(1, 2)) +
-    # scale_color_brewer(palette = "Paired", guide = guide_legend(title = "Values")) +
-    theme_bg()
-    # coord_cartesian(ylim = c(50, 250))
+    scale_shape_manual(name = "SBP Values", values = c(2, 3)) +
+    theme_bg() +
+    theme(legend.title = element_text(color = "grey35")) +
+    coord_cartesian(ylim = c(75, 225))
 ```
 
-```{r}
+```{r, eval=FALSE}
 sbp_drip %>%
     filter(duration < 25) %>%
     mutate(diff_goal = sbp - goal) %>%
