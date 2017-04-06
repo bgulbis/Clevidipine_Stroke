@@ -18,6 +18,7 @@ output:
 library(readxl)
 library(tidyverse)
 library(stringr)
+library(lubridate)
 library(MESS)
 library(tableone)
 library(themebg)
@@ -33,6 +34,8 @@ sbp <- read_excel("../data/raw/sbp.xlsx") %>%
            med.time = Time,
            sbp = SBP,
            goal) %>%
+    # correct patient admit time
+    mutate(admit = if_else(patient == 62, mdy_hm("3/21/2012 21:00"), admit)) %>%
     arrange(patient, med.time) %>%
     filter(med.time >= admit) %>%
     group_by(patient) %>%
@@ -41,6 +44,10 @@ sbp <- read_excel("../data/raw/sbp.xlsx") %>%
            interval = coalesce(interval, 0),
            at.goal = sbp <= goal)
 
+admit <- sbp %>%
+    ungroup() %>%
+    distinct(patient, admit)
+
 drip_start <- read_excel("../data/raw/bp_drip_start.xlsx") %>%
     select(patient = `Patient number`,
            sbp_admit = `Admit SBP`,
@@ -48,7 +55,10 @@ drip_start <- read_excel("../data/raw/bp_drip_start.xlsx") %>%
     left_join(sbp[c("patient", "med.time", "sbp")], by = c("patient", "sbp_drip" = "sbp")) %>%
     arrange(patient, med.time) %>%
     distinct(patient, .keep_all = TRUE) %>%
-    rename(drip.datetime = med.time)
+    rename(drip.datetime = med.time) %>%
+    left_join(admit, by = "patient") %>%
+    # if the drip start time is NA, use the admit time
+    mutate(drip.datetime = coalesce(drip.datetime, admit))
 
 sbp_drip <- left_join(sbp, drip_start[c("patient", "drip.datetime")], by = "patient") %>%
     filter(med.time >= drip.datetime) %>%
