@@ -73,7 +73,7 @@ sbp.auc <- sbp %>%
     summarize(cum.duration = last(duration),
               sbp.first = first(sbp),
               sbp.last = last(sbp),
-              perc.change.sbp = (sbp.last - sbp.first) / sbp.first,
+              perc.change.sbp = (sbp.last - sbp.first) / sbp.first * 100,
               sbp.min = min(sbp),
               auc.24h = auc(duration, sbp),
               sbp.mean.weighted = auc.24h / cum.duration)
@@ -84,7 +84,7 @@ sbp_drip_auc <- sbp_drip %>%
     summarize(cum.duration = last(duration),
               sbp.first = first(sbp),
               sbp.last = last(sbp),
-              perc.change.sbp = (sbp.last - sbp.first) / sbp.first,
+              perc.change.sbp = (sbp.last - sbp.first) / sbp.first * 100,
               sbp.min = min(sbp),
               auc.24h = auc(duration, sbp),
               sbp.mean.weighted = auc.24h / cum.duration)
@@ -108,24 +108,36 @@ sbp.change <- sbp %>%
            diff6 = abs(6 - duration)) %>%
     group_by(patient) %>%
     filter(duration == 0 | (diff2 == min(diff2) & diff2 <= 1) | (diff6 == min(diff6) & diff6 <= 1)) %>%
-    mutate(change = sbp - first(sbp)) %>%
+    mutate(change = sbp - first(sbp),
+           perc.change = change / first(sbp) * 100) %>%
     filter(duration > 0) %>%
     mutate(period = if_else(diff2 <= 1, "change.2hr", if_else(diff6 <= 1, "change.6hr", NA_character_))) %>%
     group_by(patient, period) %>%
-    summarize(change = first(change)) %>%
-    spread(period, change)
+    summarize(change = first(change),
+              perc.change = first(perc.change)) %>%
+    unite(val, change, perc.change) %>%
+    spread(period, val) %>%
+    extract(change.2hr, c("change.2hr", "perc.change.2hr"), "(.*)_(.*)", convert = TRUE) %>%
+    extract(change.6hr, c("change.6hr", "perc.change.6hr"), "(.*)_(.*)", convert = TRUE)
+
 
 sbp_drip_change <- sbp_drip %>%
     mutate(diff2 = abs(2 - duration),
            diff6 = abs(6 - duration)) %>%
     group_by(patient) %>%
     filter(duration == 0 | (diff2 == min(diff2) & diff2 <= 1) | (diff6 == min(diff6) & diff6 <= 1)) %>%
-    mutate(change = sbp - first(sbp)) %>%
+    mutate(change = sbp - first(sbp),
+           perc.change = change / first(sbp) * 100) %>%
     filter(duration > 0) %>%
     mutate(period = if_else(diff2 <= 1, "change.2hr", if_else(diff6 <= 1, "change.6hr", NA_character_))) %>%
     group_by(patient, period) %>%
-    summarize(change = first(change)) %>%
-    spread(period, change)
+    summarize(change = first(change),
+              perc.change = first(perc.change)) %>%
+    unite(val, change, perc.change) %>%
+    spread(period, val) %>%
+    extract(change.2hr, c("change.2hr", "perc.change.2hr"), "(.*)_(.*)", convert = TRUE) %>%
+    extract(change.6hr, c("change.6hr", "perc.change.6hr"), "(.*)_(.*)", convert = TRUE)
+
 
 sbp.goal <- sbp %>%
     filter(duration <= 24,
@@ -145,7 +157,7 @@ data.bp <- sbp %>%
     left_join(sbp.auc, by = "patient") %>%
     left_join(sbp.min, by = "patient") %>%
     left_join(sbp.goal, by = "patient") %>%
-    mutate(perc.time.at.goal = time.at.goal / cum.duration) %>%
+    mutate(perc.time.at.goal = time.at.goal / cum.duration * 100) %>%
     left_join(sbp.change, by = "patient")
 
 data_drip_bp <- sbp_drip %>%
@@ -154,7 +166,7 @@ data_drip_bp <- sbp_drip %>%
     left_join(sbp_drip_auc, by = "patient") %>%
     left_join(sbp_drip_min, by = "patient") %>%
     left_join(sbp_drip_goal, by = "patient") %>%
-    mutate(perc.time.at.goal = time.at.goal / cum.duration) %>%
+    mutate(perc.time.at.goal = time.at.goal / cum.duration * 100) %>%
     left_join(sbp_drip_change, by = "patient")
 
 mean.bp <- data.bp %>%
@@ -275,7 +287,9 @@ df <- data.bp %>%
            `Time to Minimum SBP (hours)` = sbp.min.time,
            `24-Hour SBP AUC` = auc.24h,
            `SBP Change at 2-Hours` = change.2hr,
-           `SBP Change at 6-Hours` = change.6hr)
+           `SBP Percent Change at 2-Hours` = perc.change.2hr,  
+           `SBP Change at 6-Hours` = change.6hr,
+           `SBP Percent Change at 6-Hours` = perc.change.6hr)
 
 vars <- names(df)[-c(1:3)]
 tbl <- CreateTableOne(vars, "group", df)
@@ -316,7 +330,9 @@ df <- data_drip_bp %>%
            `Time to Minimum SBP (hours)` = sbp.min.time,
            `24-Hour SBP AUC` = auc.24h,
            `SBP Change at 2-Hours` = change.2hr,
-           `SBP Change at 6-Hours` = change.6hr)
+           `SBP Percent Change at 2-Hours` = perc.change.2hr,  
+           `SBP Change at 6-Hours` = change.6hr,
+           `SBP Percent Change at 6-Hours` = perc.change.6hr)
 
 vars <- names(df)[-c(1:3)]
 tbl <- CreateTableOne(vars, "group", df)
