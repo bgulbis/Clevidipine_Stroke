@@ -382,11 +382,11 @@ sbp_hourly <- sbp_drip %>%
 fig1 <- sbp_drip %>%
     filter(duration < 25) %>%
     ggplot() +
-    geom_point(data = sbp_hourly, aes(x = duration, y = sbp, shape = group), alpha = 0.35, size = 0.8) +
+    geom_point(data = sbp_hourly, aes(x = duration, y = sbp, shape = group), alpha = 0.25, size = 0.5) +
     geom_smooth(aes(x = duration, y = sbp, linetype = group), color = "black", se = FALSE) +
     facet_grid(. ~ diagnosis) +
     scale_x_continuous("Time from drip initiation (hours)", breaks = seq(0, 24, 6)) +
-    scale_y_continuous("Systolic blood pressure (mmHg)", breaks = seq(0, 300, 25)) +
+    scale_y_continuous("Systolic blood pressure (SBP) (mmHg)", breaks = seq(0, 300, 25)) +
     scale_linetype(name = "SBP Trend") +
     scale_shape_manual(name = "SBP Values", values = c(2, 3)) +
     theme_bg() +
