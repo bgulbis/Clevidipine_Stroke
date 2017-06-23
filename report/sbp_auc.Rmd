@@ -379,19 +379,25 @@ sbp_hourly <- sbp_drip %>%
     mutate(hour = floor(duration)) %>%
     distinct(patient, hour, .keep_all = TRUE)
 
-sbp_drip %>%
+fig1 <- sbp_drip %>%
     filter(duration < 25) %>%
     ggplot() +
-    geom_point(data = sbp_hourly, aes(x = duration, y = sbp, shape = group), alpha = 0.4, size = 0.8) +
-    geom_smooth(aes(x = duration, y = sbp, linetype = group), color = "black") +
+    geom_point(data = sbp_hourly, aes(x = duration, y = sbp, shape = group), alpha = 0.25, size = 0.5) +
+    geom_smooth(aes(x = duration, y = sbp, linetype = group), color = "black", se = FALSE) +
     facet_grid(. ~ diagnosis) +
     scale_x_continuous("Time from drip initiation (hours)", breaks = seq(0, 24, 6)) +
     scale_y_continuous("Systolic blood pressure (mmHg)", breaks = seq(0, 300, 25)) +
+    ggtitle()
     scale_linetype(name = "SBP Trend") +
     scale_shape_manual(name = "SBP Values", values = c(2, 3)) +
     theme_bg() +
     theme(legend.title = element_text(color = "grey35")) +
     coord_cartesian(ylim = c(75, 225))
+
+# ggsave("figure_01.pdf", fig1, "pdf", width = 170, height = 85, units = "mm")
+ggsave("figure_01.tiff", fig1, "tiff", width = 170, height = 85, units = "mm", dpi = 300, compression = "lzw")
+
+fig1
 ```
 
 ```{r, eval=FALSE}
