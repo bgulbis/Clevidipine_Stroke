@@ -1,0 +1,34 @@
+---
+title: "Utilization"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  html_document:
+    code_folding: hide
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE}
+library(tidyverse)
+library(broom)
+
+bags <- read_rds("../data/tidy/meds.Rds")
+```
+
+```{r}
+bags %>%
+    group_by(med) %>%
+    rename(num = n) %>%
+    summarize_at("num", funs(n = sum(!is.na(.)), min, max, mean, sd, median, `25th` = quantile(., probs = 0.25), `75th` = quantile(., probs = 0.75), `n/a` = sum(is.na(.))), na.rm = TRUE) %>%
+    knitr::kable(digits = 2, caption = "Number of Bags")
+```
+
+```{r}
+t.test(n ~ med, data = bags) %>%
+    tidy() %>%
+    knitr::kable(digits = 3)
+```
+
